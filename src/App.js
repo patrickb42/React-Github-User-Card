@@ -26,7 +26,7 @@ class App extends Component {
 
   retrieveUser = (username) => axios.get(`https://api.github.com/users/${username}`);
 
-  retrieveFollowers = (username) => axios.get(`https://api.github.com/users/${username}/followers`);
+  retrieveFollowersList = (username) => axios.get(`https://api.github.com/users/${username}/followers`);
 
   extractUserData = (response) => {
     const {
@@ -50,28 +50,44 @@ class App extends Component {
       following,
       bio,
     };
-  }
+  };
+
+  retrieveFollowersData = async (username) => {
+      const followersList = await this.retrieveFollowersList(username);
+      let extractedFollowers = [];
+
+      const promises = followersList.data.map((follower) => {
+        const followerResponse = this.retrieveUser(follower.login);
+        const followerData = this.extractUserData(followerResponse);
+        return followerData;
+      });
+      Promise.all(promises)
+        .then((responses) => {
+          extractedFollowers = responses.map(reponse => this.extractUserData(reponse));
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      return extractedFollowers;
+  };
 
   submitUserRequest = (event) => {
     event.preventDefault();
 
     (async () => {
       const currentTarget = event.currentTarget;
+      const username = currentTarget.querySelector('.username-text').value;
 
       try {
-        const response = await this.retrieveUser(
-          currentTarget.querySelector('.username-text').value
-        );
+        const response = await this.retrieveUser(username);
   
-        console.log(response.data);
         currentTarget.querySelector('h2').classList.add('hidden');
-        
-        
+
         this.setState({
           ...this.state,
           input: '',
           user: this.extractUserData(response),
-          followers: [],
+          followers: await this.retrieveFollowersData(username),
         });
         currentTarget.querySelector('.username-text').value = '';
       } catch (error) {
@@ -81,8 +97,6 @@ class App extends Component {
   }
 
   render() {
-    // console.log(`user data ${JSON.stringify(this.state.user)}`);
-    
     return (
       <div className="container">
         <Header />
@@ -91,7 +105,10 @@ class App extends Component {
           updateText={this.updateInputText}
           submitUserRequest={this.submitUserRequest}
         />
-        <Cards userData={this.state.user}/>
+        <Cards
+          userData={this.state.user}
+          followersData={this.state.followers}
+        />
       </div>
     );
   }

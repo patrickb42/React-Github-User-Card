@@ -133,6 +133,10 @@ form h2 {
   margin-bottom: 3px;
 }
 
+.card p a {
+  cursor: pointer;
+}
+
 .card .username {
   font-size: 1.8rem;
   font-style: italic;

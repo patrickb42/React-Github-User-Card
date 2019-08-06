@@ -23,7 +23,7 @@ class Card extends Component {
           <p>{`Location: ${location}`}</p>
           <p>
             {'Profile: '}
-            <a href="#">{html_url}</a>
+            <a href={html_url}>{html_url}</a>
           </p>
           <p>{`Followers: ${followers}`}</p>
           <p>{`Following: ${following}`}</p>
