@@ -1,22 +1,33 @@
 import React, { Component } from 'react';
 
 class Card extends Component {
+  
   render() {
+    const {
+      avatar_url,
+      name,
+      login,
+      location,
+      html_url,
+      followers,
+      following,
+      bio,
+    } = this.props.userData;
+
     return (
       <div className="card">
-        {/* <img src={null} alt={this.props.cardData.username}/> */}
-        <img src={null} alt="placeholder"/>
+        <img src={avatar_url} alt={name}/>
         <div className="card-info">
-          <h3 className="name">Name</h3>
-          <p className="username">Username</p>
-          <p>{`Location: `}</p>
+          <h3 className="name">{name}</h3>
+          <p className="username">{login}</p>
+          <p>{`Location: ${location}`}</p>
           <p>
             {'Profile: '}
-            <a href="#">{`Address`}</a>
+            <a href="#">{html_url}</a>
           </p>
-          <p>{`Followers: `}</p>
-          <p>{`Following: `}</p>
-          <p>{`Bio: `}</p>
+          <p>{`Followers: ${followers}`}</p>
+          <p>{`Following: ${following}`}</p>
+          <p>{`Bio: ${bio}`}</p>
         </div>
       </div>
     );

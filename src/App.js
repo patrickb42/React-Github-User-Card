@@ -91,7 +91,7 @@ class App extends Component {
           updateText={this.updateInputText}
           submitUserRequest={this.submitUserRequest}
         />
-        <Cards />
+        <Cards userData={this.state.user}/>
       </div>
     );
   }
