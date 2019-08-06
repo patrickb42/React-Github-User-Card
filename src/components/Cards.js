@@ -11,6 +11,11 @@ class Cards extends Component {
         {this.props.userData.login
           && <>
             <Card userData={this.props.userData}/>
+            {this.props.followersData.map((follower) => {
+              return (
+                <Card key={follower.login} userData={follower} />
+              );
+            })}
           </>
         }
       </div>
