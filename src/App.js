@@ -54,19 +54,18 @@ class App extends Component {
 
   retrieveFollowersData = async (username) => {
     const followersList = await this.retrieveFollowersList(username);
-    let extractedFollowers = [];
 
     const promises = followersList.data.map(follower => this.retrieveUser(follower.login));
     Promise.all(promises)
       .then((responses) => {
-          extractedFollowers = responses.map(reponse => this.extractUserData(reponse));
-          console.log(`line 69 ${JSON.stringify(extractedFollowers)}`);
-        })
-        .catch((error) => {
-          console.error(error);
+        this.setState({
+          ...this.state,
+          followers: responses.map(reponse => this.extractUserData(reponse)),
         });
-    
-    return extractedFollowers;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   submitUserRequest = (event) => {
@@ -85,8 +84,9 @@ class App extends Component {
           ...this.state,
           input: '',
           user: this.extractUserData(response),
-          followers: await this.retrieveFollowersData(username),
+          followers: [],
         });
+        this.retrieveFollowersData(username);
         currentTarget.querySelector('.username-text').value = '';
       } catch (error) {
         currentTarget.querySelector('h2').classList.remove('hidden');
@@ -96,12 +96,9 @@ class App extends Component {
   }
 
   render() {
-    // console.log(`line 101 ${JSON.stringify(this.state.followers)}`);
-    
     return (
       <div
         className="container"
-        // onClick={() => console.log(`line 105 ${JSON.stringify(this.state.followers)}`)}
       >
         <Header />
         <UserForm
