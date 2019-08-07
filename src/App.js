@@ -70,7 +70,6 @@ class App extends Component {
           followers: [],
         });
         this.retrieveFollowersData(username);
-        currentTarget.querySelector('.username-text').value = '';
       } catch (error) {
         currentTarget.querySelector('h2').classList.remove('hidden');
         console.error(error);
@@ -83,7 +82,7 @@ class App extends Component {
       <div className="container">
         <Header />
         <UserForm
-          inputText={this.input}
+          inputText={this.state.input}
           updateText={this.updateInputText}
           submitUserRequest={this.submitUserRequest}
         />
