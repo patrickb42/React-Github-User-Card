@@ -53,24 +53,20 @@ class App extends Component {
   };
 
   retrieveFollowersData = async (username) => {
-    console.log('line 56');
-    console.log(username);
-    
-    
     const followersList = await this.retrieveFollowersList(username);
-    console.log(followersList);
     
     let extractedFollowers = [];
 
-    const promises = followersList.data.map((follower) => {
-      console.log(follower);
+    const promises = followersList.data.map(async (follower) => {
+      const followerResponse = await this.retrieveUser(follower.login);
+      console.log(followerResponse);
       
-      const followerResponse = this.retrieveUser(follower.login);
       const followerData = this.extractUserData(followerResponse);
       return followerData;
     });
     Promise.all(promises)
       .then((responses) => {
+        
         extractedFollowers = responses.map(reponse => this.extractUserData(reponse));
       })
       .catch((error) => {
@@ -100,6 +96,7 @@ class App extends Component {
         currentTarget.querySelector('.username-text').value = '';
       } catch (error) {
         currentTarget.querySelector('h2').classList.remove('hidden');
+        console.trace();
       }
     })();
   }
