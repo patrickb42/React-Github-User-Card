@@ -55,18 +55,14 @@ class App extends Component {
   retrieveFollowersData = async (username) => {
     try {
       const followersList = await this.retrieveFollowersList(username);
-  
       const promises = followersList.data.map(follower => this.retrieveUser(follower.login));
-      Promise.all(promises)
-        .then((responses) => {
-          this.setState({
-            ...this.state,
-            followers: responses.map(reponse => this.extractUserData(reponse)),
-          });
-        })
-        .catch((error) => {
-          console.error(error);
+
+      Promise.all(promises).then((responses) => {
+        this.setState({
+          ...this.state,
+          followers: responses.map(reponse => this.extractUserData(reponse)),
         });
+      })
     } catch (error) {
       console.error(error);
     }
