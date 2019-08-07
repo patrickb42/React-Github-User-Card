@@ -54,24 +54,18 @@ class App extends Component {
 
   retrieveFollowersData = async (username) => {
     const followersList = await this.retrieveFollowersList(username);
-    
     let extractedFollowers = [];
 
-    const promises = followersList.data.map(async (follower) => {
-      const followerResponse = await this.retrieveUser(follower.login);
-      console.log(followerResponse);
-      
-      const followerData = this.extractUserData(followerResponse);
-      return followerData;
-    });
+    const promises = followersList.data.map(follower => this.retrieveUser(follower.login));
     Promise.all(promises)
       .then((responses) => {
-        
-        extractedFollowers = responses.map(reponse => this.extractUserData(reponse));
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+          extractedFollowers = responses.map(reponse => this.extractUserData(reponse));
+          console.log(`line 69 ${JSON.stringify(extractedFollowers)}`);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    
     return extractedFollowers;
   };
 
@@ -102,8 +96,13 @@ class App extends Component {
   }
 
   render() {
+    // console.log(`line 101 ${JSON.stringify(this.state.followers)}`);
+    
     return (
-      <div className="container">
+      <div
+        className="container"
+        // onClick={() => console.log(`line 105 ${JSON.stringify(this.state.followers)}`)}
+      >
         <Header />
         <UserForm
           inputText={this.input}
