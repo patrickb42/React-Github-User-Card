@@ -90,7 +90,7 @@ class App extends Component {
         currentTarget.querySelector('.username-text').value = '';
       } catch (error) {
         currentTarget.querySelector('h2').classList.remove('hidden');
-        console.trace();
+        console.error(error);
       }
     })();
   }
