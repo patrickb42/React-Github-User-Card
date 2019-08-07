@@ -53,22 +53,30 @@ class App extends Component {
   };
 
   retrieveFollowersData = async (username) => {
-      const followersList = await this.retrieveFollowersList(username);
-      let extractedFollowers = [];
+    console.log('line 56');
+    console.log(username);
+    
+    
+    const followersList = await this.retrieveFollowersList(username);
+    console.log(followersList);
+    
+    let extractedFollowers = [];
 
-      const promises = followersList.data.map((follower) => {
-        const followerResponse = this.retrieveUser(follower.login);
-        const followerData = this.extractUserData(followerResponse);
-        return followerData;
+    const promises = followersList.data.map((follower) => {
+      console.log(follower);
+      
+      const followerResponse = this.retrieveUser(follower.login);
+      const followerData = this.extractUserData(followerResponse);
+      return followerData;
+    });
+    Promise.all(promises)
+      .then((responses) => {
+        extractedFollowers = responses.map(reponse => this.extractUserData(reponse));
+      })
+      .catch((error) => {
+        console.error(error);
       });
-      Promise.all(promises)
-        .then((responses) => {
-          extractedFollowers = responses.map(reponse => this.extractUserData(reponse));
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-      return extractedFollowers;
+    return extractedFollowers;
   };
 
   submitUserRequest = (event) => {
