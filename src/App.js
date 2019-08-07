@@ -29,27 +29,8 @@ class App extends Component {
   retrieveFollowersList = (username) => axios.get(`https://api.github.com/users/${username}/followers`);
 
   extractUserData = (response) => {
-    const {
-      avatar_url,
-      name,
-      login,
-      location,
-      html_url,
-      followers,
-      following,
-      bio,
-    } = response.data;
-
-    return {
-      avatar_url,
-      name,
-      login,
-      location,
-      html_url,
-      followers,
-      following,
-      bio,
-    };
+    const  { avatar_url, name, login, location, html_url, followers, following, bio } = response.data;
+    return { avatar_url, name, login, location, html_url, followers, following, bio };
   };
 
   retrieveFollowersData = async (username) => {
