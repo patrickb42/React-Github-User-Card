@@ -53,19 +53,23 @@ class App extends Component {
   };
 
   retrieveFollowersData = async (username) => {
-    const followersList = await this.retrieveFollowersList(username);
-
-    const promises = followersList.data.map(follower => this.retrieveUser(follower.login));
-    Promise.all(promises)
-      .then((responses) => {
-        this.setState({
-          ...this.state,
-          followers: responses.map(reponse => this.extractUserData(reponse)),
+    try {
+      const followersList = await this.retrieveFollowersList(username);
+  
+      const promises = followersList.data.map(follower => this.retrieveUser(follower.login));
+      Promise.all(promises)
+        .then((responses) => {
+          this.setState({
+            ...this.state,
+            followers: responses.map(reponse => this.extractUserData(reponse)),
+          });
+        })
+        .catch((error) => {
+          console.error(error);
         });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   submitUserRequest = (event) => {
@@ -97,9 +101,7 @@ class App extends Component {
 
   render() {
     return (
-      <div
-        className="container"
-      >
+      <div className="container">
         <Header />
         <UserForm
           inputText={this.input}
